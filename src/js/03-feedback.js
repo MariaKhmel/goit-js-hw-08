@@ -1,5 +1,7 @@
 import throttle from 'lodash.throttle';
 const throttle = require('lodash.throttle');
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 
 const STORAGE_KEY = 'feedback-form-state';
 
@@ -12,7 +14,7 @@ const refs = {
 };
 
 refs.form.addEventListener('submit', onFormSubmit);
-refs.textarea.addEventListener('input', throttle(onFormInput, 500));
+refs.form.addEventListener('input', throttle(onFormInput, 500));
 
 
 
@@ -25,9 +27,17 @@ populateTextarea();
 function onFormSubmit(evt) {
   evt.preventDefault();
 
- evt.currentTarget.reset();
+  if (emailItem.value.length !== 0 && messageItem.value.length !== 0) {
+
+    console.log(messageItem.value.length)
+     evt.currentTarget.reset();
 console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
   localStorage.removeItem(STORAGE_KEY);
+    
+  } else {
+    Notify.failure('Please fill in both fields');
+  }
+
 }
 
 
